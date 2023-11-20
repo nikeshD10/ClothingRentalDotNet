@@ -15,7 +15,7 @@ namespace ClothingRentalApp.Infrastructure
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Rental> Rentals { get; set; }
-        public DbSet<RentalItem> RentalItems { get; set; }
+        //public DbSet<RentalItem> RentalItems { get; set; }
 
         public string DbPath { get; private set; }
 
