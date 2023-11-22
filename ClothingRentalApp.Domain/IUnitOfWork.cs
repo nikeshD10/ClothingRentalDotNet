@@ -10,10 +10,11 @@ namespace ClothingRentalApp.Domain
     {
         IBrandRepository BrandRepository { get; }
         ICategoryRepository CategoryRepository { get; }
+        IClothingItemRepository ClothingItemRepository { get; }
         ICustomerRepository CustomerRepository { get; }
         IEmployeeRepository EmployeeRepository { get; }
         IPaymentRepository PaymentRepository { get; }
-        IRentalRepository RentRepository { get; }
+        IRentalRepository RentalRepository { get; }
         Task SaveAsync();
     }
 }

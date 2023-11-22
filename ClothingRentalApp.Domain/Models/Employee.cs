@@ -16,5 +16,10 @@ namespace ClothingRentalApp.Domain.Models
         public bool IsAdmin { get; set; }
 
         public List<Rental> Rentals { get; set; }
+
+        public override string ToString()
+        {
+            return $"Employee with name : {Name}, email : {Email} and password : {Password} and role : {IsAdmin}";
+        }
     }
 }

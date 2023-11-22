@@ -8,5 +8,6 @@ namespace ClothingRentalApp.Domain.Models
     public class Brand : Entity
     {
         public string Name { get; set; }
+        public ClothingItem ClothingItem { get; set; }
     }
 }
