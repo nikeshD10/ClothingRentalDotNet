@@ -1,6 +1,7 @@
 ﻿using ClothingRentalApp.Domain;
 using ClothingRentalApp.Domain.Repositories;
 using ClothingRentalApp.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,16 +11,17 @@ namespace ClothingRentalApp.Infrastructure
 {
     public class UnitOfWork :IUnitOfWork
     {
-        public ClothingRentalAppDbContext _dbContext { get; private set; }
+        // public ClothingRentalAppDbContext _dbContext { get; private set; }
+        private readonly ClothingRentalAppDbContext _dbContext;
 
         public UnitOfWork()
         {
             _dbContext = new ClothingRentalAppDbContext();
             //Create database only if not exists
-            _dbContext.Database.EnsureCreated();
+            //_dbContext.Database.EnsureCreated();
 
-            // App;y a migration
-            //_dbContext.Database.Migrate();
+            // Apply a migration
+            _dbContext.Database.Migrate();
         }
 
         
@@ -27,13 +29,15 @@ namespace ClothingRentalApp.Infrastructure
 
         public IBrandRepository BrandRepository =>  new BrandRepository(_dbContext);
 
+        public IClothingItemRepository ClothingItemRepository => new ClothingItemRepository(_dbContext);
+
         public ICustomerRepository CustomerRepository =>  new CustomerRepository(_dbContext);
 
         public IEmployeeRepository EmployeeRepository =>  new EmployeeRepository(_dbContext);
 
         public IPaymentRepository PaymentRepository =>  new PaymentRepository(_dbContext);
 
-        public IRentalRepository RentRepository => throw new NotImplementedException();
+        public IRentalRepository RentalRepository => new RentalRepository(_dbContext);
 
         public void Dispose()
         {

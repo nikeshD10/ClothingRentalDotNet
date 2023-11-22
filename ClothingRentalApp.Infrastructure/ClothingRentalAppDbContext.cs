@@ -15,8 +15,6 @@ namespace ClothingRentalApp.Infrastructure
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Rental> Rentals { get; set; }
-        //public DbSet<RentalItem> RentalItems { get; set; }
-
         public string DbPath { get; private set; }
 
         public ClothingRentalAppDbContext()
@@ -94,12 +92,36 @@ namespace ClothingRentalApp.Infrastructure
             modelBuilder.Entity<ClothingItem>(
                     entityBuilder =>
                     {
-                       // entityBuilder.Property
+                        entityBuilder.Property(c => c.Name).IsRequired();
+                        entityBuilder.Property(c => c.RentPrice).IsRequired().HasColumnType("double");
+                        entityBuilder.Property(c => c.StockQuantity).IsRequired().HasColumnType("int");
+                        entityBuilder.Property(c => c.AvailabilityStatus).IsRequired();
+                        entityBuilder.Property(c => c.Description).IsRequired().HasMaxLength(200);
+                        entityBuilder.Property(c => c.Size).IsRequired().HasColumnType("int");
+                        entityBuilder.Property(c => c.Image);
+                        entityBuilder.Property(c => c.Color).IsRequired().HasMaxLength(20);
                     }
                 );
+
+            modelBuilder.Entity<ClothingItem>().HasKey(c => c.Id);
+            modelBuilder.Entity<ClothingItem>().HasOne<Category>(c => c.Category).WithOne(cat => cat.ClothingItem).HasForeignKey<ClothingItem>(c => c.CategoryId);
+
+
+            // *************************   For Rental   ***************** //
+            modelBuilder.Entity<Rental>(
+                    entityBuilder =>
+                    {
+                        entityBuilder.Property(r => r.RentalDate).IsRequired().HasDefaultValue(new DateTime());
+                        entityBuilder.Property(r => r.ReturnDate);
+                        entityBuilder.Property(r => r.RentalStatus).IsRequired();
+                        entityBuilder.Property(r => r.RentPeriod).IsRequired().HasColumnType("int");
+                    }
+                );
+
+            modelBuilder.Entity<Rental>().HasKey(r => r.Id);
+            modelBuilder.Entity<Rental>().HasOne<Employee>(r => r.Employee).WithMany(e => e.Rentals).HasForeignKey(r => r.EmployeeId);
+            modelBuilder.Entity<Rental>().HasOne<Customer>(r => r.Customer).WithMany(e => e.Rentals).HasForeignKey(r => r.CustomerId);
         }
-
-
 
         public string PrintDbPath()
         {

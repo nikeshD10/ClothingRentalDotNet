@@ -16,7 +16,6 @@ namespace ClothingRentalApp.Domain.Repositories
         Task<bool> IsCustomerRegisteredAsync(string email);
         // retrieve customer with all rental history
         Task<Customer> FindByIdWithRentalsAsync(int customerId);
-        void RegisterCustomer(Customer customer);
 
 
     }

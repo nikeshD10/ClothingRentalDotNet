@@ -13,8 +13,7 @@ namespace ClothingRentalApp.Domain.Repositories
         Task<Employee> findByIdWithRentalsAsync(string email);
         Task<Employee> findByEmailWithRentalsAsync(int employeeId);
         Task<bool> IsEmployeeRegistered(string email);
-
-        void Register(string name, string email, string password, bool isAdmin = false);
-        Employee Login(string email, string password);
+        Task<Employee> Register(Employee employee);
+        Task<Employee> Login(string email, string password);
     }
 }

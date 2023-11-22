@@ -19,6 +19,7 @@ namespace ClothingRentalApp.Domain.Models
         public DateTime RentalDate { get; set; }
         public DateTime ReturnDate { get; set; }
         public RentStatus RentalStatus { get; set; }
+        public int RentPeriod { get; set; }
 
         public int EmployeeId { get; set; } // Foregin Key
         public Employee Employee { get; set; }

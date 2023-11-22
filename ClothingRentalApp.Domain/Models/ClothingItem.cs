@@ -11,13 +11,15 @@ namespace ClothingRentalApp.Domain.Models
 
         public double RentPrice { get; set; }
 
-        public int StockQuality { get; set; }
+        public int StockQuantity { get; set; }
 
         public string AvailabilityStatus { get; set; }
 
         public string Description { get; set; }
 
         public int Size { get; set; }
+
+        public byte[] Image { get; set; }
 
         public string Color { get; set; }
 

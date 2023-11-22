@@ -1,4 +1,5 @@
 ﻿using ClothingRentalApp.Domain.SeedWork;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,27 +18,32 @@ namespace ClothingRentalApp.Infrastructure.Repositories
         }
         public void Create(T e)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(T e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> FindAllAsync(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> FindByIdAsync(int id)
-        {
-            throw new NotImplementedException();
+            _dbContext.Add(e);
         }
 
         public void Update(T e)
         {
-            throw new NotImplementedException();
+            _dbContext.Update(e);
         }
+
+        public void Delete(T e)
+        {
+            _dbContext.Remove(e);
+        }
+
+        public async Task<List<T>> FindAllAsync(int Id)
+        {
+            return await _dbContext.Set<T>().ToListAsync();
+        }
+
+        public async Task<T> FindByIdAsync(int Id)
+        {
+            return await _dbContext.Set<T>().FindAsync(Id);
+            // we can also do like this
+            // return await _dbContext.Set<T>().Where(b => b.Id == Id).SingleAsync();
+            // return await _dbContext.Set<T>().SingleAsync(x => x.Id == id);
+        }
+
+       
     }
 }

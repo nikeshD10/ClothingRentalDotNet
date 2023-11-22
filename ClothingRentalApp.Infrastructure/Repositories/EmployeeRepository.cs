@@ -1,21 +1,18 @@
 ﻿using ClothingRentalApp.Domain.Models;
 using ClothingRentalApp.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ClothingRentalApp.Infrastructure.Repositories
 {
     public class EmployeeRepository: Repository<Employee>, IEmployeeRepository
     {
-        private List<Employee> employees;
-
         public EmployeeRepository(ClothingRentalAppDbContext dbContext) : base(dbContext)
         {
-            employees = new List<Employee>();
         }
 
         public Task<Employee> findByEmailWithRentalsAsync(int employeeId)
@@ -38,39 +35,32 @@ namespace ClothingRentalApp.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Employee Login(string email, string password)
+        public async Task<Employee> Login(string email, string password)
         {
-            var employee = employees.FirstOrDefault(e => e.Email == email);
-
-            //Check of the employee exists and the provided password is correct
-            if (employee != null && employee.Password == password)
+            try
             {
-                Console.WriteLine("Login successfull.");
+                var employee = await _dbContext.Employees
+               .Where(e => e.Email == email && e.Password == password)
+               .FirstAsync();
+
                 return employee;
+            } catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException("Invalid Login Credentials", ex);
             }
-            Console.WriteLine("Invalid email or password.");
-            return null;
+           
         }
 
-        public void Register(string name, string email, string password, bool isAdmin = false)
+        public async Task<Employee>Register(Employee employee)
         {
-            if (employees.Any(e => e.Email == email))
-            {
-                Console.WriteLine("Email is already registered. Please use a different one.");
-                return;
+            // check if the employee already exist with the email
+            bool existenceStatus = await _dbContext.Employees.AnyAsync(e => e.Email == employee.Email);
+            if (existenceStatus) {
+                throw new InvalidOperationException("Employee with this email already exists");
             }
-
-            //Create a new employee and add to the list
-            var newEmployee = new Employee()
-            {
-                Name = name,
-                Email = email,
-                Password = password,
-                IsAdmin = isAdmin,
-                //Rentals = new List<Rental>()
-            };
-            employees.Add(newEmployee);
-            Console.WriteLine("Registration sucessfull.");
+            _dbContext.Employees.Add(employee);
+            await _dbContext.SaveChangesAsync();
+            return employee;
         }
     }
 }

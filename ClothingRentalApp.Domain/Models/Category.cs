@@ -7,6 +7,7 @@ namespace ClothingRentalApp.Domain.Models
 {
     public class Category : Entity
     {
-        public string Name { get; set; }    
+        public string Name { get; set; }  
+        public ClothingItem ClothingItem { get; set; }
     }
 }
